@@ -1,0 +1,7 @@
+{
+  "installCommand": "npm install --prefix banco/frontend",
+  "buildCommand": "npm run build --prefix banco/frontend",
+  "outputDirectory": "banco/frontend/dist",
+  "framework": "vite",
+  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+}
