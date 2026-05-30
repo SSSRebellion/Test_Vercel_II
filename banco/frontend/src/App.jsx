@@ -4,13 +4,16 @@ const LS_ACCESS = 'banco_access';
 const LS_REFRESH = 'banco_refresh';
 const LS_USER = 'banco_username';
 
+/** En Vercel: VITE_API_URL=https://tu-api.onrender.com (sin barra final) */
+const API_BASE = (import.meta.env.VITE_API_URL ?? '').replace(/\/$/, '');
+
 async function apiFetch(path, { method = 'GET', body, skipAuth = false } = {}) {
   const headers = { 'Content-Type': 'application/json' };
   if (!skipAuth) {
     const access = localStorage.getItem(LS_ACCESS);
     if (access) headers.Authorization = `Bearer ${access}`;
   }
-  const res = await fetch(path, {
+  const res = await fetch(`${API_BASE}${path}`, {
     method,
     headers,
     body: body !== undefined ? JSON.stringify(body) : undefined,
@@ -197,9 +200,8 @@ export default function App() {
       <div className="app">
         <h1>Gestión Bancaria</h1>
         <p className="small">
-          En local, ejecuta el backend Django en <code>http://127.0.0.1:8000</code> y{' '}
-          <code>npm run dev</code> en <code>frontend/</code>. En Vercel, las peticiones{' '}
-          <code>/api</code> se reenvían al backend configurado con <code>BACKEND_URL</code>.
+          En local: backend en <code>http://127.0.0.1:8000</code> y <code>npm run dev</code> en{' '}
+          <code>frontend/</code>. En Vercel: define <code>VITE_API_URL</code> con la URL de Render.
         </p>
         <div className="card">
           <form onSubmit={login}>

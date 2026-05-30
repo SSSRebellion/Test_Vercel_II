@@ -36,12 +36,21 @@ ALLOWED_HOSTS = [
     if host.strip()
 ]
 
+# Render define RENDER_EXTERNAL_HOSTNAME (ej. banco-api-vfg8.onrender.com)
+_render_host = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+if _render_host and _render_host not in ALLOWED_HOSTS:
+    ALLOWED_HOSTS.append(_render_host)
+
 # CORS: frontend local, Vercel u otros despliegues que llamen al backend directamente
 _default_cors = 'http://localhost:5173,http://127.0.0.1:5173'
 CORS_ALLOWED_ORIGINS = [
     origin.strip()
     for origin in os.environ.get('CORS_ALLOWED_ORIGINS', _default_cors).split(',')
     if origin.strip()
+]
+# Despliegues en *.vercel.app (producción y previews)
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    r'^https://[\w-]+\.vercel\.app$',
 ]
 CORS_ALLOW_CREDENTIALS = True
 
